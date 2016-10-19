@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  letsencrypt:
+    image: blacklabelops/letsencrypt:20161017
+    ports:
+      - '443:443'
+      - '80:80'
+    volumes:
+      - ssl_certificates:/etc/letsencrypt
+    environment:
+      - 'LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}'
+      - 'LETSENCRYPT_DOMAIN1=${LETSENCRYPT_DOMAIN}'
+    command: install
+
+volumes:
+  ssl_certificates:
+    external: false

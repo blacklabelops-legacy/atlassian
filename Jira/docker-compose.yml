@@ -1,0 +1,63 @@
+version: '2'
+
+services:
+  nginx:
+    image: blacklabelops/nginx
+    ports:
+      - '443:443'
+      - '80:80'
+    volumes:
+      - nginx_volume:/home/nginx
+      - ssl_certificates:/etc/letsencrypt
+    environment:
+      - 'TZ=${JIRA_TIME_ZONE}'
+      - 'NGINX_REDIRECT_PORT80=${JIRA_PORT80_REDIRECT}'
+      - 'SERVER1SERVER_NAME=${JIRA_DOMAIN_NAME}'
+      - 'SERVER1REVERSE_PROXY_LOCATION1=/'
+      - 'SERVER1REVERSE_PROXY_PASS1=http://jira:8080'
+      - 'SERVER1HTTPS_ENABLED=${JIRA_HTTPS}'
+      - 'SERVER1HTTP_ENABLED=${JIRA_HTTP}'
+      - 'SERVER1LETSENCRYPT_CERTIFICATES=${JIRA_HTTPS}'
+      - 'SERVER1CERTIFICATE_FILE=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER1CERTIFICATE_KEY=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/privkey.pem'
+      - 'SERVER1CERTIFICATE_TRUSTED=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER1PROXY_APPLICATION=jira'
+  jira_postgresql:
+    image: blacklabelops/postgres:${JIRA_POSTGRES_VERSION}
+    container_name: jira_postgresql
+    hostname: jira_postgresql
+    volumes:
+      - jira_postgresql_volume:/var/lib/postgresql/data
+    environment:
+      - 'TZ=${JIRA_TIME_ZONE}'
+      - 'POSTGRES_DB=jiradb'
+      - 'POSTGRES_USER=${JIRA_DB_USERNAME}'
+      - 'POSTGRES_PASSWORD=${JIRA_DB_PASSWORD}'
+      - 'POSTGRES_ENCODING=UNICODE'
+      - 'POSTGRES_COLLATE=C'
+      - 'POSTGRES_COLLATE_TYPE=C'
+  jira:
+    image: blacklabelops/jira:${JIRA_VERSION}
+    container_name: jira
+    hostname: jira
+    volumes:
+      - jira_volume:/var/atlassian/jira
+    environment:
+      - 'TZ=${JIRA_TIME_ZONE}'
+      - "CATALINA_OPTS=${JIRA_JAVA_OPTIONS}"
+      - "JIRA_PROXY_NAME=${JIRA_DOMAIN_NAME}"
+      - "JIRA_PROXY_PORT=${JIRA_PROXY_PORT}"
+      - "JIRA_PROXY_SCHEME=${JIRA_PROXY_SCHEME}"
+      - 'JIRA_DATABASE_URL=postgresql://${JIRA_DB_USERNAME}@jira_postgresql/jiradb'
+      - 'JIRA_DB_PASSWORD=${JIRA_DB_PASSWORD}'
+      - 'JIRA_DELAYED_START=${JIRA_DELAYED_START}'
+
+volumes:
+  nginx_volume:
+    external: false
+  ssl_certificates:
+    external: false
+  jira_postgresql_volume:
+    external: false
+  jira_volume:
+    external: false
