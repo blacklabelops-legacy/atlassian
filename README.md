@@ -19,11 +19,12 @@ The basic Jira stack:
 
 Running the stack:
 
-1. Obtain the blacklabelops docker-compose file by running:
+1. Download the blacklabelops docker-compose file by running:
 
 ~~~~
 $ mkdir Letsencrypt
-$ curl -o /Letsencrypt/docker-compose.yml https://github.com/blacklabelops/atlassian
+$ curl -o /Letsencrypt/default.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/default.env
+$ curl -o /Letsencrypt/docker-compose.yml https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/docker-compose.yml
 $ cd Jira
 ~~~~
 
@@ -61,11 +62,11 @@ In order to obtain free SSL certificates for your Atlassian instances use my let
 Requirements: Your host must be reachable under the respective domain name. E.g. www.myatlassianhost.com. Then
 run the image on the host and the certificates will be saved inside a docker volume.
 
-1. Obtain the blacklabelops/letsencrypt docker-compose file by running:
+1. Download the blacklabelops/letsencrypt docker-compose file by running:
 
 ~~~~
 $ mkdir Letsencrypt
-$ curl -o /Letsencrypt/docker-compose.yml https://github.com/blacklabelops/atlassian
+$ curl -o /Letsencrypt/docker-compose.yml https://raw.githubusercontent.com/blacklabelops/atlassian/master/Letsencrypt/docker-compose.yml
 $ cd Letsencrypt
 ~~~~
 
