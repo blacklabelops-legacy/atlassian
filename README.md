@@ -9,7 +9,75 @@ Requirements:
 * Docker
 * Docker-Compose
 
-## Jira
+Based on the following containers:
+
+* [blacklabelops/jira](https://github.com/blacklabelops/jira): The #1 software development tool used by agile teams
+* [blacklabelops/confluence](https://github.com/blacklabelops/confluence): Create, organize, and discuss work with your team
+* [blacklabelops/bitbucket](https://github.com/blacklabelops/bitbucket): Code, Manage, Collaborate
+* [blacklabelops/crowd](https://github.com/blacklabelops/crowd): Identity management for web apps
+* [blacklabelops/nginx](https://github.com/blacklabelops/nginx): Http Server
+* [blacklabelops/postgres](https://github.com/blacklabelops/postgres): Database
+
+# Support & Feature Requests
+
+Leave a message and ask questions on Hipchat: [blacklabelops/hipchat](https://www.hipchat.com/geogBFvEM)
+
+# Deploying Atlassian Stack
+
+Running the whole Atlassian software stack on your local computer.
+
+* Nginx Reverse Proxy (Http)
+* Jira Software
+* Confluence
+* Bitbucket
+* Crowd
+* PostgreSQL Databases
+
+Prerequisite:
+
+If you want to try the stack on your local compute then setup the following domains in your host settings (Mac/Linux: /etc/hosts):
+
+* jira.yourhost.com
+* confluence.yourhost.com
+* bitbucket.yourhost.com
+* crowd.yourhost.com
+
+Running the software stack:
+
+1. Download the blacklabelops docker-compose file by running:
+
+~~~~
+$ mkdir AtlassianStack
+$ curl -o /AtlassianStack/default.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/AtlassianStack/default.env
+$ curl -o /AtlassianStack/docker-compose.yml https://raw.githubusercontent.com/blacklabelops/atlassian/master/AtlassianStack/docker-compose.yml
+$ cd AtlassianStack
+~~~~
+
+1. Now set the default environment variables:
+
+~~~~
+$ source default.env
+~~~~
+
+> Bash command for setting environment variables, you have to manually define the environment variables under Windows
+
+1. Override password variables:
+
+~~~~
+$ export ATLASSIAN_TIME_ZONE=Europe/Berlin
+~~~~
+
+> You can override any environment variable inside the file default.env.
+
+1. Start the whole setup:
+
+~~~~
+$ docker-compose up -d
+~~~~
+
+> Jira will be accessible under http://jira.yourhost.com
+
+# Deploying Jira
 
 The basic Jira stack:
 
@@ -55,7 +123,7 @@ $ docker-compose up -d
 
 > Jira will be accessible under http://localhost
 
-## Letsencrypt SSL Certificates
+# Letsencrypt SSL Certificates
 
 In order to obtain free SSL certificates for your Atlassian instances use my letsencrypt Docker image.
 
@@ -138,3 +206,10 @@ $ docker-compose run --rm \
     -e LETSENCRYPT_DOMAIN3=bitbucket.youratlassianhost.com \
     letsencrypt renewal
 ~~~~
+
+# References
+
+* [Atlassian Jira](https://www.atlassian.com/software/jira)
+* [Docker Homepage](https://www.docker.com/)
+* [Docker Compose](https://docs.docker.com/compose/)
+* [Docker Userguide](https://docs.docker.com/userguide/)

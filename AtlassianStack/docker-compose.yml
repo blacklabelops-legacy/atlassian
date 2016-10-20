@@ -1,0 +1,188 @@
+version: '2'
+
+services:
+  nginx:
+    image: blacklabelops/nginx:${ATLASSIAN_NGINX_VERSION}
+    ports:
+      - '443:443'
+      - '80:80'
+    networks:
+      default:
+        aliases:
+          - '${CONFLUENCE_DOMAIN_NAME}'
+          - '${CROWD_DOMAIN_NAME}'
+          - '${BITBUCKET_DOMAIN_NAME}'
+          - '${JIRA_DOMAIN_NAME}'
+    volumes:
+      - nginx_volume:/home/nginx
+      - ssl_certificates:/etc/letsencrypt
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - 'NGINX_REDIRECT_PORT80=${ATLASSIAN_PORT80_REDIRECT}'
+      - 'SERVER1SERVER_NAME=${JIRA_DOMAIN_NAME}'
+      - 'SERVER1REVERSE_PROXY_LOCATION1=/'
+      - 'SERVER1REVERSE_PROXY_PASS1=http://jira:8080'
+      - 'SERVER1HTTPS_ENABLED=${ATLASSIAN_HTTPS}'
+      - 'SERVER1HTTP_ENABLED=${ATLASSIAN_HTTP}'
+      - 'SERVER1LETSENCRYPT_CERTIFICATES=${ATLASSIAN_HTTPS}'
+      - 'SERVER1CERTIFICATE_FILE=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER1CERTIFICATE_KEY=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/privkey.pem'
+      - 'SERVER1CERTIFICATE_TRUSTED=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER1PROXY_APPLICATION=jira'
+      - 'SERVER2SERVER_NAME=${CROWD_DOMAIN_NAME}'
+      - 'SERVER2REVERSE_PROXY_LOCATION1=/'
+      - 'SERVER2REVERSE_PROXY_PASS1=http://crowd:8095'
+      - 'SERVER2HTTPS_ENABLED=${ATLASSIAN_HTTPS}'
+      - 'SERVER2HTTP_ENABLED=${ATLASSIAN_HTTP}'
+      - 'SERVER2LETSENCRYPT_CERTIFICATES=${ATLASSIAN_HTTPS}'
+      - 'SERVER2CERTIFICATE_FILE=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER2CERTIFICATE_KEY=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/privkey.pem'
+      - 'SERVER2CERTIFICATE_TRUSTED=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER2PROXY_APPLICATION=crowd'
+      - 'SERVER3SERVER_NAME=${CONFLUENCE_DOMAIN_NAME}'
+      - 'SERVER3REVERSE_PROXY_LOCATION1=/'
+      - 'SERVER3REVERSE_PROXY_PASS1=http://confluence:8090'
+      - 'SERVER3HTTPS_ENABLED=${ATLASSIAN_HTTPS}'
+      - 'SERVER3HTTP_ENABLED=${ATLASSIAN_HTTP}'
+      - 'SERVER3LETSENCRYPT_CERTIFICATES=${ATLASSIAN_HTTPS}'
+      - 'SERVER3CERTIFICATE_FILE=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER3CERTIFICATE_KEY=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/privkey.pem'
+      - 'SERVER3CERTIFICATE_TRUSTED=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER3PROXY_APPLICATION=confluence'
+      - 'SERVER4SERVER_NAME=${BITBUCKET_DOMAIN_NAME}'
+      - 'SERVER4REVERSE_PROXY_LOCATION1=/'
+      - 'SERVER4REVERSE_PROXY_PASS1=http://bitbucket:7990'
+      - 'SERVER4HTTPS_ENABLED=${ATLASSIAN_HTTPS}'
+      - 'SERVER4HTTP_ENABLED=${ATLASSIAN_HTTP}'
+      - 'SERVER4LETSENCRYPT_CERTIFICATES=${ATLASSIAN_HTTPS}'
+      - 'SERVER4CERTIFICATE_FILE=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER4CERTIFICATE_KEY=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/privkey.pem'
+      - 'SERVER4CERTIFICATE_TRUSTED=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
+      - 'SERVER4PROXY_APPLICATION=bitbucket'
+  jira_postgresql:
+    image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
+    container_name: jira_postgresql
+    hostname: jira_postgresql
+    volumes:
+      - jira_postgresql_volume:/var/lib/postgresql/data
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - 'POSTGRES_DB=atlassiandb'
+      - 'POSTGRES_USER=${ATLASSIAN_DB_USERNAME}'
+      - 'POSTGRES_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
+      - 'POSTGRES_ENCODING=UNICODE'
+      - 'POSTGRES_COLLATE=C'
+      - 'POSTGRES_COLLATE_TYPE=C'
+  jira:
+    image: blacklabelops/jira:${JIRA_VERSION}
+    container_name: jira
+    hostname: jira
+    volumes:
+      - jira_volume:/var/atlassian/jira
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - "CATALINA_OPTS=${JIRA_JAVA_OPTIONS}"
+      - "JIRA_PROXY_NAME=${JIRA_DOMAIN_NAME}"
+      - "JIRA_PROXY_PORT=${ATLASSIAN_PROXY_PORT}"
+      - "JIRA_PROXY_SCHEME=${ATLASSIAN_PROXY_SCHEME}"
+      - 'JIRA_DATABASE_URL=postgresql://${ATLASSIAN_DB_USERNAME}@jira_postgresql/atlassiandb'
+      - 'JIRA_DB_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
+      - 'JIRA_DELAYED_START=${ATLASSIAN_DB_DELAYED_START}'
+  crowd_postgresql:
+    image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
+    container_name: crowd_postgresql
+    hostname: crowd_postgresql
+    volumes:
+      - crowd_postgresql_volume:/var/lib/postgresql
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - 'POSTGRES_DB=atlassiandb'
+      - 'POSTGRES_USER=${ATLASSIAN_DB_USERNAME}'
+      - 'POSTGRES_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
+  crowd:
+    image: blacklabelops/crowd:${CROWD_VERSION}
+    container_name: crowd
+    hostname: crowd
+    volumes:
+      - crowd_volume:/var/atlassian/crowd
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - "CROWD_PROXY_NAME=${CROWD_DOMAIN_NAME}"
+      - "CROWD_PROXY_PORT=${ATLASSIAN_PROXY_PORT}"
+      - "CROWD_PROXY_SCHEME=${ATLASSIAN_PROXY_SCHEME}"
+      - "CROWD_URL=http://localhost:8095"
+      - "SPLASH_CONTEXT="
+      - "CROWD_CONTEXT=ROOT"
+      - "CROWDID_CONTEXT="
+      - "OPENID_CLIENT_CONTEXT="
+  confluence_postgresql:
+    image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
+    container_name: confluence_postgresql
+    hostname: confluence_postgresql
+    volumes:
+      - confluence_postgresql_volume:/var/lib/postgresql
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - 'POSTGRES_DB=atlassiandb'
+      - 'POSTGRES_USER=${ATLASSIAN_DB_USERNAME}'
+      - 'POSTGRES_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
+  confluence:
+    image: blacklabelops/confluence:${CONFLUENCE_VERSION}
+    container_name: confluence
+    hostname: confluence
+    volumes:
+      - confluence_volume:/var/atlassian/confluence
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - "CATALINA_OPTS=${CONFLUENCE_JAVA_OPTIONS}"
+      - "CONFLUENCE_PROXY_NAME=${CONFLUENCE_DOMAIN_NAME}"
+      - "CONFLUENCE_PROXY_PORT=${ATLASSIAN_PROXY_PORT}"
+      - "CONFLUENCE_PROXY_SCHEME=${ATLASSIAN_PROXY_SCHEME}"
+  bitbucket_postgresql:
+    image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
+    container_name: bitbucket_postgresql
+    hostname: bitbucket_postgresql
+    volumes:
+      - bitbucket_postgresql_volume:/var/lib/postgresql/data
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - 'POSTGRES_DB=atlassiandb'
+      - 'POSTGRES_USER=${ATLASSIAN_DB_USERNAME}'
+      - 'POSTGRES_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
+      - 'POSTGRES_ENCODING=UTF8'
+  bitbucket:
+    image: blacklabelops/bitbucket:${BITBUCKET_VERSION}
+    container_name: bitbucket
+    hostname: bitbucket
+    ports:
+      - 7999:7999
+    volumes:
+      - bitbucket_volume:/var/atlassian/bitbucket
+    environment:
+      - 'TZ=${ATLASSIAN_TIME_ZONE}'
+      - "CATALINA_OPTS=${BITBUCKET_JAVA_OPTIONS}"
+      - "BITBUCKET_PROXY_NAME=${BITBUCKET_DOMAIN_NAME}"
+      - "BITBUCKET_PROXY_PORT=${ATLASSIAN_PROXY_PORT}"
+      - "BITBUCKET_PROXY_SCHEME=${ATLASSIAN_PROXY_SCHEME}"
+
+volumes:
+  nginx_volume:
+    external: false
+  ssl_certificates:
+    external: false
+  jira_postgresql_volume:
+    external: false
+  jira_volume:
+    external: false
+  crowd_postgresql_volume:
+    external: false
+  crowd_volume:
+    external: false
+  confluence_postgresql_volume:
+    external: false
+  confluence_volume:
+    external: false
+  bitbucket_postgresql_volume:
+    external: false
+  bitbucket_volume:
+    external: false
