@@ -90,9 +90,9 @@ Running the stack:
 1. Download the blacklabelops docker-compose file by running:
 
 ~~~~
-$ mkdir Letsencrypt
-$ curl -o /Letsencrypt/default.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/default.env
-$ curl -o /Letsencrypt/docker-compose.yml https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/docker-compose.yml
+$ mkdir Jira
+$ curl -o /Jira/default.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/default.env
+$ curl -o /Jira/docker-compose.yml https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/docker-compose.yml
 $ cd Jira
 ~~~~
 
