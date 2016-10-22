@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  letsencrypt:
+    image: blacklabelops/letsencrypt:20161017
+    ports:
+      - '443:443'
+      - '80:80'
+    volumes:
+      - ssl_certificates:/etc/letsencrypt
+    environment:
+      - 'LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}'
+      - 'LETSENCRYPT_DOMAIN1=${JIRA_DOMAIN_NAME}'
+      - 'LETSENCRYPT_DOMAIN2=${CROWD_DOMAIN_NAME}'
+      - 'LETSENCRYPT_DOMAIN3=${CONFLUENCE_DOMAIN_NAME}'
+      - 'LETSENCRYPT_DOMAIN4=${BITBUCKET_DOMAIN_NAME}'
+    command: install
+
+volumes:
+  ssl_certificates:
+    external: false
