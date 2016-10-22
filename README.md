@@ -49,9 +49,6 @@ Start here: [Documentation](https://github.com/blacklabelops/atlassian/tree/mast
 
 In order to obtain free SSL certificates for your Atlassian instances use my letsencrypt Docker image.
 
-Requirements: Your host must be reachable under the respective domain name. E.g. www.myatlassianhost.com. Then
-run the image on the host and the certificates will be saved inside a docker volume.
-
 The creation of SSL certificates is dependent on your stack. See the documentation of each stack.
 
 Further documentation: [Documentation](https://github.com/blacklabelops/atlassian/tree/master/Letsencrypt)
@@ -59,6 +56,11 @@ Further documentation: [Documentation](https://github.com/blacklabelops/atlassia
 # References
 
 * [Atlassian Jira](https://www.atlassian.com/software/jira)
+* [Atlassian Confluence](https://www.atlassian.com/software/confluence)
+* [Atlassian Bitbucket](https://www.atlassian.com/software/bitbucket)
+* [Atlassian Crowd](https://www.atlassian.com/software/crowd/overview/)
+* [Nginx](http://nginx.org/)
+* [Letsencrypt](https://letsencrypt.org/)
 * [Docker Homepage](https://www.docker.com/)
 * [Docker Compose](https://docs.docker.com/compose/)
 * [Docker Userguide](https://docs.docker.com/userguide/)
