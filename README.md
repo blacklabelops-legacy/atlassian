@@ -22,7 +22,7 @@ Based on the following containers:
 
 Leave a message and ask questions on Hipchat: [blacklabelops/hipchat](https://www.hipchat.com/geogBFvEM)
 
-# Deploying Atlassian Stack
+# Atlassian Stack
 
 Running the whole Atlassian software stack on your local computer.
 
@@ -33,51 +33,9 @@ Running the whole Atlassian software stack on your local computer.
 * Crowd
 * PostgreSQL Databases
 
-Prerequisite:
+Start here: [Documentation](https://github.com/blacklabelops/atlassian/tree/master/Jira)
 
-If you want to try the stack on your local compute then setup the following domains in your host settings (Mac/Linux: /etc/hosts):
-
-* jira.yourhost.com
-* confluence.yourhost.com
-* bitbucket.yourhost.com
-* crowd.yourhost.com
-
-Running the software stack:
-
-1. Download the blacklabelops docker-compose file by running:
-
-~~~~
-$ mkdir AtlassianStack
-$ curl -o /AtlassianStack/default.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/AtlassianStack/default.env
-$ curl -o /AtlassianStack/docker-compose.yml https://raw.githubusercontent.com/blacklabelops/atlassian/master/AtlassianStack/docker-compose.yml
-$ cd AtlassianStack
-~~~~
-
-1. Now set the default environment variables:
-
-~~~~
-$ source default.env
-~~~~
-
-> Bash command for setting environment variables, you have to manually define the environment variables under Windows
-
-1. Override password variables:
-
-~~~~
-$ export ATLASSIAN_TIME_ZONE=Europe/Berlin
-~~~~
-
-> You can override any environment variable inside the file default.env.
-
-1. Start the whole setup:
-
-~~~~
-$ docker-compose up -d
-~~~~
-
-> Jira will be accessible under http://jira.yourhost.com
-
-# Deploying Jira
+# Jira
 
 The basic Jira stack:
 
@@ -85,43 +43,7 @@ The basic Jira stack:
 * Jira Software
 * PostgreSQL Database
 
-Running the stack:
-
-1. Download the blacklabelops docker-compose file by running:
-
-~~~~
-$ mkdir Jira
-$ curl -o /Jira/default.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/default.env
-$ curl -o /Jira/docker-compose.yml https://raw.githubusercontent.com/blacklabelops/atlassian/master/Jira/docker-compose.yml
-$ cd Jira
-~~~~
-
-1. Now set the default environment variables:
-
-~~~~
-$ source default.env
-~~~~
-
-> Bash command for setting environment variables, you have to manually define the environment variables under Windows
-
-1. Override password variables:
-
-~~~~
-$ export JIRA_DB_USERNAME=yourusername
-$ export JIRA_DB_PASSWORD=yourdbpassword
-$ export JIRA_TIME_ZONE=Europe/Berlin
-$ export JIRA_DOMAIN_NAME=localhost
-~~~~
-
-> You can override any environment variable inside the file default.env.
-
-1. Start the whole setup:
-
-~~~~
-$ docker-compose up -d
-~~~~
-
-> Jira will be accessible under http://localhost
+Start here: [Documentation](https://github.com/blacklabelops/atlassian/tree/master/Jira)
 
 # Letsencrypt SSL Certificates
 
@@ -186,10 +108,10 @@ Command:
 ~~~~
 $ docker-compose run --rm \
     -p 443:443 \
-    -e LETSENCRYPT_EMAIL=youremail@emailhost.de
-    -e LETSENCRYPT_DOMAIN=jira.youratlassianhost.com \
-    -e LETSENCRYPT_DOMAIN2=confluence.youratlassianhost.com \
-    -e LETSENCRYPT_DOMAIN3=bitbucket.youratlassianhost.com \
+    -e LETSENCRYPT_EMAIL=youremail@emailhost.de \
+    -e LETSENCRYPT_DOMAIN=jira.yourhost.com \
+    -e LETSENCRYPT_DOMAIN2=confluence.yourhost.com \
+    -e LETSENCRYPT_DOMAIN3=bitbucket.yourhost.com \
     letsencrypt install
 ~~~~
 
@@ -200,10 +122,10 @@ Renewal Command:
 ~~~~
 $ docker-compose run --rm \
     -p 443:443 \
-    -e LETSENCRYPT_EMAIL=youremail@emailhost.de
-    -e LETSENCRYPT_DOMAIN=jira.youratlassianhost.com \
-    -e LETSENCRYPT_DOMAIN2=confluence.youratlassianhost.com \
-    -e LETSENCRYPT_DOMAIN3=bitbucket.youratlassianhost.com \
+    -e LETSENCRYPT_EMAIL=youremail@emailhost.de \
+    -e LETSENCRYPT_DOMAIN=jira.yourhost.com \
+    -e LETSENCRYPT_DOMAIN2=confluence.yourhost.com \
+    -e LETSENCRYPT_DOMAIN3=bitbucket.yourhost.com \
     letsencrypt renewal
 ~~~~
 
