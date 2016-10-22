@@ -33,7 +33,7 @@ Running the whole Atlassian software stack on your local computer.
 * Crowd
 * PostgreSQL Databases
 
-Start here: [Documentation](https://github.com/blacklabelops/atlassian/tree/master/Jira)
+Start here: [Documentation](https://github.com/blacklabelops/atlassian/tree/master/AtlassianStack)
 
 # Jira
 
