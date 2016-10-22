@@ -110,6 +110,7 @@ $ curl -o /AtlassianStack/dc-letsencrypt.yml https://raw.githubusercontent.com/b
 1. Define domain name variables:
 
 ~~~~
+$ export LETSENCRYPT_EMAIL=mail@youremail.com
 $ export JIRA_DOMAIN_NAME=jira.yourhost.com
 $ export CROWD_DOMAIN_NAME=crowd.yourhost.com
 $ export CONFLUENCE_DOMAIN_NAME=confluence.yourhost.com
