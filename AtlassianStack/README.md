@@ -93,6 +93,63 @@ $ docker-compose up -d
 
 > Jira will be accessible under http://jira.yourhost.com
 
+## Setup Jira
+
+Configure your Jira yourself and fill it with a test license.
+
+1. Access your Jira instance under http://jira.yourhost.com
+1. Enter license information and setup admin account.
+1. Have fun using Jira!
+
+## Setup Confluence
+
+Configure your Confluence yourself and fill it with a test license.
+
+1. Access your Confluence instance under http://confluence.yourhost.com
+1. Choose `Production Installation` because we have a postgres!
+1. Enter license information
+1. In `Choose a Database Configuration` choose `PostgeSQL` and press `External Database`
+1. In `Configure Database` press `Direct JDBC`
+1. In `Configure Database` fill out the form:
+
+* Driver Class Name: `org.postgresql.Driver`
+* Database URL: `jdbc:postgresql://confluence_postgresql:5432/atlassiandb`
+* User Name: `atlassiandb` (Your entry in environment variable `ATLASSIAN_DB_USERNAME`)
+* Password: `atlassiandb` (Your entry in environment variable `ATLASSIAN_DB_PASSWORD`)
+
+## Setup Bitbucket
+
+Configure your Bitbucket yourself and fill it with a test license.
+
+1. Access your Bitbucket instance under http://bitbucket.yourhost.com
+1. Choose `External` for `Database` and fill out the form:
+  * Database Type: `PostgreSQL`
+  * Hostname: `bitbucket_postgresql`
+  * Port: `5432`
+  * Database name: `atlassiandb`
+  * Database username: `atlassiandb` (Your entry in environment variable `ATLASSIAN_DB_USERNAME`)
+  * Database password: `atlassiandb` (Your entry in environment variable `ATLASSIAN_DB_PASSWORD`)
+1. Create and enter license information
+1. Fill out the rest of the installation procedure.
+
+## Setup Crowd
+
+Configure your Crowd yourself and fill it with a test license.
+
+1. Access your Crowd instance under http://crowd.yourhost.com
+1. Choose `Set up Crowd`
+1. Create and enter license information
+1. Choose `New installation`
+1. In `Database configuration` choose `JDBC connection` and fill out the form:
+  * Database: PostgreSQL
+  * Driver Class Name: `org.postgresql.Driver`
+  * JDBC URL: `jdbc:postgresql://crowd_postgresql:5432/atlassiandb`
+  * Username: `atlassiandb` (Your entry in environment variable `ATLASSIAN_DB_USERNAME`)
+  * Password: `atlassiandb` (Your entry in environment variable `ATLASSIAN_DB_PASSWORD`)
+  * Hibernate dialect: `org.hibernate.dialect.PostgreSQLDialect`
+1. In `Options` choose `http://localhost:8095/crowd` for field `Base URL` otherwise you won't be able to connect later on.
+1. Fill out the rest of the installation procedure.
+
 ## Letsencrypt SSL Certificates
 
 You need a letsencrypt chain certificate for all the required domains.

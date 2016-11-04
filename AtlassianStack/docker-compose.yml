@@ -59,9 +59,9 @@ services:
       - 'SERVER4CERTIFICATE_KEY=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/privkey.pem'
       - 'SERVER4CERTIFICATE_TRUSTED=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
       - 'SERVER4PROXY_APPLICATION=bitbucket'
+    restart: unless-stopped
   jira_postgresql:
     image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
-    container_name: jira_postgresql
     hostname: jira_postgresql
     volumes:
       - jira_postgresql_volume:/var/lib/postgresql/data
@@ -73,9 +73,9 @@ services:
       - 'POSTGRES_ENCODING=UNICODE'
       - 'POSTGRES_COLLATE=C'
       - 'POSTGRES_COLLATE_TYPE=C'
+    restart: unless-stopped
   jira:
     image: blacklabelops/jira:${JIRA_VERSION}
-    container_name: jira
     hostname: jira
     volumes:
       - jira_volume:/var/atlassian/jira
@@ -88,6 +88,7 @@ services:
       - 'JIRA_DATABASE_URL=postgresql://${ATLASSIAN_DB_USERNAME}@jira_postgresql/atlassiandb'
       - 'JIRA_DB_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
       - 'JIRA_DELAYED_START=${ATLASSIAN_DB_DELAYED_START}'
+    restart: unless-stopped
   crowd_postgresql:
     image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
     container_name: crowd_postgresql
@@ -99,9 +100,9 @@ services:
       - 'POSTGRES_DB=atlassiandb'
       - 'POSTGRES_USER=${ATLASSIAN_DB_USERNAME}'
       - 'POSTGRES_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
+    restart: unless-stopped
   crowd:
     image: blacklabelops/crowd:${CROWD_VERSION}
-    container_name: crowd
     hostname: crowd
     volumes:
       - crowd_volume:/var/atlassian/crowd
@@ -115,9 +116,9 @@ services:
       - "CROWD_CONTEXT=ROOT"
       - "CROWDID_CONTEXT="
       - "OPENID_CLIENT_CONTEXT="
+    restart: unless-stopped
   confluence_postgresql:
     image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
-    container_name: confluence_postgresql
     hostname: confluence_postgresql
     volumes:
       - confluence_postgresql_volume:/var/lib/postgresql
@@ -126,9 +127,9 @@ services:
       - 'POSTGRES_DB=atlassiandb'
       - 'POSTGRES_USER=${ATLASSIAN_DB_USERNAME}'
       - 'POSTGRES_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
+    restart: unless-stopped
   confluence:
     image: blacklabelops/confluence:${CONFLUENCE_VERSION}
-    container_name: confluence
     hostname: confluence
     volumes:
       - confluence_volume:/var/atlassian/confluence
@@ -138,6 +139,7 @@ services:
       - "CONFLUENCE_PROXY_NAME=${CONFLUENCE_DOMAIN_NAME}"
       - "CONFLUENCE_PROXY_PORT=${ATLASSIAN_PROXY_PORT}"
       - "CONFLUENCE_PROXY_SCHEME=${ATLASSIAN_PROXY_SCHEME}"
+    restart: unless-stopped
   bitbucket_postgresql:
     image: blacklabelops/postgres:${ATLASSIAN_POSTGRES_VERSION}
     container_name: bitbucket_postgresql
@@ -150,9 +152,9 @@ services:
       - 'POSTGRES_USER=${ATLASSIAN_DB_USERNAME}'
       - 'POSTGRES_PASSWORD=${ATLASSIAN_DB_PASSWORD}'
       - 'POSTGRES_ENCODING=UTF8'
+    restart: unless-stopped
   bitbucket:
     image: blacklabelops/bitbucket:${BITBUCKET_VERSION}
-    container_name: bitbucket
     hostname: bitbucket
     ports:
       - 7999:7999
@@ -164,6 +166,7 @@ services:
       - "BITBUCKET_PROXY_NAME=${BITBUCKET_DOMAIN_NAME}"
       - "BITBUCKET_PROXY_PORT=${ATLASSIAN_PROXY_PORT}"
       - "BITBUCKET_PROXY_SCHEME=${ATLASSIAN_PROXY_SCHEME}"
+    restart: unless-stopped
 
 volumes:
   nginx_volume:
