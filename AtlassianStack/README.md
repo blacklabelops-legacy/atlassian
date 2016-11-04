@@ -20,7 +20,7 @@ If you want to try the stack on your local compute then setup the following doma
 
 Running the software stack:
 
-1. Download the blacklabelops docker-compose file by running:
+Download the blacklabelops docker-compose file by running:
 
 ~~~~
 $ mkdir AtlassianStack
@@ -29,7 +29,7 @@ $ curl -o /AtlassianStack/docker-compose.yml https://raw.githubusercontent.com/b
 $ cd AtlassianStack
 ~~~~
 
-1. Now set the default environment variables:
+Now set the default environment variables:
 
 ~~~~
 $ source default.env
@@ -37,7 +37,7 @@ $ source default.env
 
 > Bash command for setting environment variables, you have to manually define the environment variables under Windows
 
-1. Override password variables:
+Override password variables:
 
 ~~~~
 $ export ATLASSIAN_TIME_ZONE=Europe/Berlin
@@ -45,47 +45,7 @@ $ export ATLASSIAN_TIME_ZONE=Europe/Berlin
 
 > You can override any environment variable inside the file default.env.
 
-1. Start the whole setup:
-
-~~~~
-$ docker-compose up -d
-~~~~
-
-> Jira will be accessible under http://jira.yourhost.com
-
-# Deploying Atlassian Https Stack
-
-You can deploy the stack with https. First you have to create Letsencrypt Ssl certificates: See Section "Letsencrypt SSL Certificates".
-
-Then start the stack with the https settings.
-
-1. Download the blacklabelops https settings file by running:
-
-~~~~
-.. make sure your inside the folder AtlassianStack/ ..
-$ curl -o /AtlassianStack/defaultHttps.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/AtlassianStack/defaultHttps.env
-~~~~
-
-1. Now set the default environment variables:
-
-~~~~
-$ source defaultHttps.env
-~~~~
-
-> Bash command for setting environment variables, you have to manually define the environment variables under Windows
-
-1. Define domain name variables:
-
-~~~~
-$ export JIRA_DOMAIN_NAME=jira.yourhost.com
-$ export CROWD_DOMAIN_NAME=crowd.yourhost.com
-$ export CONFLUENCE_DOMAIN_NAME=confluence.yourhost.com
-$ export BITBUCKET_DOMAIN_NAME=bitbucket.yourhost.com
-~~~~
-
-> Export is a Linux/Mac command, under Windows use SET command.
-
-1. Start the whole setup:
+Start the whole setup:
 
 ~~~~
 $ docker-compose up -d
@@ -149,6 +109,46 @@ Configure your Crowd yourself and fill it with a test license.
   * Hibernate dialect: `org.hibernate.dialect.PostgreSQLDialect`
 1. In `Options` choose `http://localhost:8095/crowd` for field `Base URL` otherwise you won't be able to connect later on.
 1. Fill out the rest of the installation procedure.
+
+# Deploying Atlassian Https Stack
+
+You can deploy the stack with https. First you have to create Letsencrypt Ssl certificates: See Section "Letsencrypt SSL Certificates".
+
+Then start the stack with the https settings.
+
+Download the blacklabelops https settings file by running:
+
+~~~~
+.. make sure your inside the folder AtlassianStack/ ..
+$ curl -o /AtlassianStack/defaultHttps.env https://raw.githubusercontent.com/blacklabelops/atlassian/master/AtlassianStack/defaultHttps.env
+~~~~
+
+Now set the default environment variables:
+
+~~~~
+$ source defaultHttps.env
+~~~~
+
+> Bash command for setting environment variables, you have to manually define the environment variables under Windows
+
+Define domain name variables:
+
+~~~~
+$ export JIRA_DOMAIN_NAME=jira.yourhost.com
+$ export CROWD_DOMAIN_NAME=crowd.yourhost.com
+$ export CONFLUENCE_DOMAIN_NAME=confluence.yourhost.com
+$ export BITBUCKET_DOMAIN_NAME=bitbucket.yourhost.com
+~~~~
+
+> Export is a Linux/Mac command, under Windows use SET command.
+
+Start the whole setup:
+
+~~~~
+$ docker-compose up -d
+~~~~
+
+> Jira will be accessible under https://jira.yourhost.com
 
 ## Letsencrypt SSL Certificates
 
