@@ -11,16 +11,22 @@ Running the whole Atlassian software stack on your local computer.
 
 Prerequisite:
 
-If you want to try the stack on your local compute then setup the following domains in your host settings (Mac/Linux: /etc/hosts):
+If you want to try the stack on your local compute then setup the following domains in your host settings (Mac/Linux: /etc/hosts, Windows: %systemroot%\system32\drivers\etc\):
 
-* jira.yourhost.com
-* confluence.yourhost.com
-* bitbucket.yourhost.com
-* crowd.yourhost.com
+* `127.0.0.1 jira.yourhost.com`
+* `127.0.0.1 confluence.yourhost.com`
+* `127.0.0.1 bitbucket.yourhost.com`
+* `127.0.0.1 crowd.yourhost.com`
 
 Running the software stack:
 
 Download the blacklabelops docker-compose file by running:
+
+Windows:
+
+Download the repository and extract: [ZIP](https://github.com/blacklabelops/atlassian/archive/master.zip)
+
+Mac/Linux:
 
 ~~~~
 $ mkdir AtlassianStack
@@ -31,13 +37,33 @@ $ cd AtlassianStack
 
 Now set the default environment variables:
 
+Windows:
+
+~~~~
+$ default.bat
+~~~~
+
+> Batch command for setting environment variables.
+
+Mac/Linux:
+
 ~~~~
 $ source default.env
 ~~~~
 
-> Bash command for setting environment variables, you have to manually define the environment variables under Windows
+> Bash command for setting environment variables.
 
 Override password variables:
+
+Windows:
+
+~~~~
+$ SET ATLASSIAN_TIME_ZONE="Europe/Berlin"
+~~~~
+
+> You can override any environment variable inside the file default.bat.
+
+Mac/Linux:
 
 ~~~~
 $ export ATLASSIAN_TIME_ZONE=Europe/Berlin
@@ -125,11 +151,22 @@ $ curl -o /AtlassianStack/defaultHttps.env https://raw.githubusercontent.com/bla
 
 Now set the default environment variables:
 
+Windows:
+
+~~~~
+$ defaultHttps.bat
+~~~~
+
+> Batch command for setting environment variables.
+
+
+Mac/Linux:
+
 ~~~~
 $ source defaultHttps.env
 ~~~~
 
-> Bash command for setting environment variables, you have to manually define the environment variables under Windows
+> Bash command for setting environment variables.
 
 Define domain name variables:
 
@@ -166,6 +203,18 @@ $ curl -o /AtlassianStack/dc-letsencrypt.yml https://raw.githubusercontent.com/b
 
 1. Define domain name variables:
 
+Windows:
+
+~~~~
+$ SET LETSENCRYPT_EMAIL="mail@youremail.com"
+$ SET JIRA_DOMAIN_NAME="jira.yourhost.com"
+$ SET CROWD_DOMAIN_NAME="crowd.yourhost.com"
+$ SET CONFLUENCE_DOMAIN_NAME="confluence.yourhost.com"
+$ SET BITBUCKET_DOMAIN_NAME="bitbucket.yourhost.com"
+~~~~
+
+Mac/Linux:
+
 ~~~~
 $ export LETSENCRYPT_EMAIL=mail@youremail.com
 $ export JIRA_DOMAIN_NAME=jira.yourhost.com
@@ -174,7 +223,7 @@ $ export CONFLUENCE_DOMAIN_NAME=confluence.yourhost.com
 $ export BITBUCKET_DOMAIN_NAME=bitbucket.yourhost.com
 ~~~~
 
-> Export is a Linux/Mac command, under Windows use SET command.
+> Export is a Linux/Mac command.
 
 1. Install certificates in stack ssl_certificates volume:
 

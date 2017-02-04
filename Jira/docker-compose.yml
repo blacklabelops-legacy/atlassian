@@ -22,6 +22,7 @@ services:
       - 'SERVER1CERTIFICATE_KEY=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/privkey.pem'
       - 'SERVER1CERTIFICATE_TRUSTED=/etc/letsencrypt/live/${JIRA_DOMAIN_NAME}/fullchain.pem'
       - 'SERVER1PROXY_APPLICATION=jira'
+    restart: unless-stopped
   jira_postgresql:
     image: blacklabelops/postgres:${JIRA_POSTGRES_VERSION}
     container_name: jira_postgresql
@@ -36,6 +37,7 @@ services:
       - 'POSTGRES_ENCODING=UNICODE'
       - 'POSTGRES_COLLATE=C'
       - 'POSTGRES_COLLATE_TYPE=C'
+    restart: unless-stopped
   jira:
     image: blacklabelops/jira:${JIRA_VERSION}
     container_name: jira
@@ -51,6 +53,7 @@ services:
       - 'JIRA_DATABASE_URL=postgresql://${JIRA_DB_USERNAME}@jira_postgresql/jiradb'
       - 'JIRA_DB_PASSWORD=${JIRA_DB_PASSWORD}'
       - 'JIRA_DELAYED_START=${JIRA_DELAYED_START}'
+    restart: unless-stopped
 
 volumes:
   nginx_volume:
