@@ -53,10 +53,6 @@ The creation of SSL certificates is dependent on your stack. See the documentati
 
 Further documentation: [Documentation](https://github.com/blacklabelops/atlassian/tree/master/Letsencrypt)
 
-# Support
-
-Leave a message and ask questions on Hipchat: [blacklabelops/hipchat](http://support.blacklabelops.com)
-
 # References
 
 * [Atlassian Jira](https://www.atlassian.com/software/jira)
